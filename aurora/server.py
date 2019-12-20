@@ -15,6 +15,7 @@ BLUE = (0, 0, 255)
 
 class EventHandler(socketserver.StreamRequestHandler):
     def __init__(self, *args):
+        super().__init__(*args)
         print("Handler created", args)
         self.lights = None
 
@@ -26,8 +27,10 @@ class EventHandler(socketserver.StreamRequestHandler):
         print("Client connected")
         reader = self.rfile
         try:
-            while not reader.at_eof():
+            while True:
                 data = reader.readline()
+                if len(data) == 0:
+                    break
                 message = data.decode()
                 print("Received", message)
                 if not use_fake_handler:
@@ -47,9 +50,6 @@ class EventHandler(socketserver.StreamRequestHandler):
             self.lights.show()
 
 class Server:
-    def __init__(self):
-        self.handler = EventHandler()
-
     def run(self):
         server = socketserver.TCPServer(('', 6666), EventHandler)
         server.serve_forever()

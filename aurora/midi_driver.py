@@ -85,7 +85,9 @@ class EventHandler:
                 )
             }
         )
-        self.s.send(wire_event.serialize().encode())
+        payload = wire_event.serialize().encode()
+        print("payload", payload)
+        self.s.sendall(payload)
 
 def main():
     s = connect()
