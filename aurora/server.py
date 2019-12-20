@@ -1,4 +1,4 @@
-import asyncio
+import socketserver
 from led_config import LEDConfig
 import protocol
 
@@ -13,15 +13,29 @@ except ImportError:
 DARK = (0, 0, 0)
 BLUE = (0, 0, 255)
 
-class EventHandler:
-    def __init__(self):
+class EventHandler(socketserver.StreamRequestHandler):
+    def __init__(self, *args):
+        print("Handler created", args)
         self.lights = None
 
     def setup_board(self):
         self.lights = neopixel.NeoPixel(board.D18, LEDConfig.total_lights, auto_write=False)
         self.lights.fill(DARK)
 
-    async def on_message(self, message):
+    def handle(self):
+        print("Client connected")
+        reader = self.rfile
+        try:
+            while not reader.at_eof():
+                data = reader.readline()
+                message = data.decode()
+                print("Received", message)
+                if not use_fake_handler:
+                    self.handler.on_message(message)
+        finally:
+            print("Client disconnected")
+
+    def on_message(self, message):
         if self.lights is None:
             self.setup_boards()
 
@@ -36,28 +50,13 @@ class Server:
     def __init__(self):
         self.handler = EventHandler()
 
-    async def on_connect(self, reader, writer):
-        print("Client connected")
-        while not reader.at_eof():
-            data = await reader.readline()
-            message = data.decode()
-            print(f"Received {message}")
-            if not use_fake_handler:
-                await self.handler.on_message(message)
-        print("Client disconnected")
+    def run(self):
+        server = socketserver.TCPServer(('', 6666), EventHandler)
+        server.serve_forever()
 
-    async def run(self):
-        server = await asyncio.start_server(
-            self.on_connect, '', 6666)
-
-        addr = server.sockets[0].getsockname()
-        print(f'Serving on {addr}')
-
-        async with server:
-            await server.serve_forever()
-
-async def main():
+def main():
     server = Server()
-    await server.run()
+    server.run()
 
-asyncio.run(main())
+if __name__ == '__main__':
+    main()
