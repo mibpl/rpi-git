@@ -14,6 +14,8 @@ from rtmidi.midiutil import list_input_ports
 import mido
 import collections
 from led_config import LEDConfig
+import protocol
+import itertools
 
 class KeyboardConfig:
     low_note = 36
@@ -45,12 +47,12 @@ class Tracker:
             self.up(event.note)
 
     def down(self, k):
-        m[k] = True
+        self.m[k] = True
     
     def up(self, k):
-        m[k] = False
+        self.m[k] = False
 
-    def wipe(self, k):
+    def wipe(self):
         self.m = collections.defaultdict(bool)
 
     def get(self):
@@ -75,7 +77,15 @@ class EventHandler:
             self.light_tracker.midi_event(event)
         else:
             self.player_tracker.midi_event(event)
-        self.s.send(f"{event}\n".encode())
+        
+        wire_event = protocol.SetStateEvent(
+            {
+                led: (0, 0, 255) for led in itertools.chain(
+                    *[note_to_leds(note) for note in self.player_tracker.get()]
+                )
+            }
+        )
+        self.s.send(wire_event.serialize().encode())
 
 def main():
     s = connect()
