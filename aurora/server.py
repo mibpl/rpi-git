@@ -4,25 +4,25 @@ import protocol
 
 use_fake_handler = False
 
-try:
-    import board
-    import neopixel
-except ImportError:
-    use_fake_handler = True
-
+lights = None
 DARK = (0, 0, 0)
 BLUE = (0, 0, 255)
 
+def setup_board():
+    global lights
+    lights = neopixel.NeoPixel(board.D18, LEDConfig.total_lights, auto_write=False)
+    lights.fill(DARK)
+
+try:
+    import board
+    import neopixel
+    setup_board()
+except ImportError:
+    print("!! Falling back to headless mode")
+    use_fake_handler = True
+
+
 class EventHandler(socketserver.StreamRequestHandler):
-    def __init__(self, *args):
-        super().__init__(*args)
-        print("Handler created", args)
-        self.lights = None
-
-    def setup_board(self):
-        self.lights = neopixel.NeoPixel(board.D18, LEDConfig.total_lights, auto_write=False)
-        self.lights.fill(DARK)
-
     def handle(self):
         print("Client connected")
         reader = self.rfile
@@ -34,20 +34,20 @@ class EventHandler(socketserver.StreamRequestHandler):
                 message = data.decode()
                 print("Received", message)
                 if not use_fake_handler:
-                    self.handler.on_message(message)
+                    self.on_message(message)
         finally:
             print("Client disconnected")
 
     def on_message(self, message):
-        if self.lights is None:
-            self.setup_boards()
-
         event = protocol.deserialize(message)
         if isinstance(event, protocol.SetStateEvent):
-            self.lights.fill(DARK)
-            for led, color in event.leds:
-                self.lights[led] = color
-            self.lights.show()
+            lights.fill(DARK)
+            for led, color in event.light_map.items():
+                try:
+                    lights[led] = color
+                except IndexError as e:
+                    print(e)
+            lights.show()
 
 class Server:
     def run(self):
