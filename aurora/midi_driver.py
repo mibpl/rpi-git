@@ -44,23 +44,38 @@ class EventHandler:
         self.s = s
         self.light_tracker = Tracker()
         self.player_tracker = Tracker()
+        self.compositor = Compositor()
     
-    def on_midi_event(self, event, data):
-        event, dt = event
-        event = mido.parse(event)
-        print(event, data)
-        if event.channel == KeyboardConfig.light_channel:
+    def on_parsed_event(self, event):
+        channel = None
+        if hasattr(event, 'channel'):
+            channel = event.channel
+
+        if channel == KeyboardConfig.light_channel:
             self.light_tracker.midi_event(event)
         else:
             self.player_tracker.midi_event(event)
         
-        compositor = Compositor()
-        compositor.add_pressed_keys(self.player_tracker.get())
-        compositor.add_hl_keys(self.light_tracker.get())
-        wire_event = compositor.as_state_event()
+        frame = self.compositor.new_frame()
+        frame.add_pressed_keys(self.player_tracker.get())
+        frame.add_hl_keys(self.light_tracker.get())
+
+        if channel != KeyboardConfig.light_channel:
+            if event.type == 'note_on':
+                frame.on_press(event.note)
+            if event.type == 'note_off':
+                frame.on_release(event.note)
+
+        wire_event = frame.as_state_event()
         payload = wire_event.serialize().encode()
         print("payload", payload)
         self.s.sendall(payload)
+
+    def on_midi_event(self, event, data):
+        event, dt = event
+        event = mido.parse(event)
+        print(event, data)
+        self.on_parsed_event(event)
 
 def main():
     s = connect()
@@ -68,13 +83,14 @@ def main():
     print(f"Connected. Starting handlers.")
 
     eh = EventHandler(s)
-    midi_input, port_name = open_midiinput(port="aurora")
+    midi_input, _port_name = open_midiinput(port="aurora")
     midi_input.set_callback(eh.on_midi_event)
     print(midi_input)
 
     try:
         while True:
-            time.sleep(4)
+            time.sleep(0.05)
+            eh.on_parsed_event(mido.Message("clock"))
     except KeyboardInterrupt:
         pass
     finally:

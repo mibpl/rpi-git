@@ -5,14 +5,19 @@ from client import connect
 import time
 import typing
 import itertools
+from collections import deque
+import enum
+
 
 def key_to_normalized_position(note):
     return (note - KeyboardConfig.low_note) / (KeyboardConfig.high_note - KeyboardConfig.low_note + 1)
+
 
 def key_to_closest_pixel(note):
     ratio = key_to_normalized_position(note)
     n = round(ratio * (LEDConfig.high_light - LEDConfig.low_light + 1) + LEDConfig.low_light)
     return int(n)
+
 
 def clip_color(color):
     def clip(x):
@@ -20,7 +25,9 @@ def clip_color(color):
     r, g, b = color
     return (clip(r), clip(g), clip(b))
 
+
 ColorT = typing.Tuple[int, int, int]
+
 
 BLUE = (0, 0, 255)
 LIGHT_BLUE = (0, 0, 10)
@@ -31,22 +38,144 @@ LIGHT_GREEN = (0, 10, 0)
 YELLOW = (80, 40, 0)
 YELLOW_LIGHT = (8, 6, 0)
 
+PURPLE = (25, 0, 65)
+
+DARK = (0, 0, 0)
+
+
 class ShadePalette(typing.NamedTuple):
     normal: ColorT
     light: ColorT
 
+
 BLUES = ShadePalette(normal=BLUE, light=LIGHT_BLUE)
 GREENS = ShadePalette(normal=GREEN, light=LIGHT_GREEN)
 YELLOWS = ShadePalette(normal=YELLOW, light=YELLOW_LIGHT)
+PURPLES = ShadePalette(normal=PURPLE, light=PURPLE)
+
+
+class CBuffer:
+    def __init__(self, n=10):
+        self.buf = deque()
+        self.n = n
+
+    def get(self):
+        return iter(self.buf)
+    
+    def add(self, e):
+        if len(self.buf) >= self.n:
+            self.buf.popleft()
+        self.buf.append(e)
+
+
+def new_canvas() -> typing.List[ColorT]:
+    return LEDConfig.total_lights * [DARK]
+
+
+class EffectManager:
+    def __init__(self):
+        self.effects = list()
+    
+    def update(self, dt):
+        for e in list(self.effects):
+            e.update(dt)
+            if e.is_ended():
+                self.effects.remove(e)
+        if len(self.effects) > 0:
+            print(f"{len(self.effects)} effects managed")
+
+    def spawn_key_release_effects(self, key):
+        self.effects.append(
+            PixelFadeOut(key_to_closest_pixel(key), PURPLES if KeyboardConfig.is_black_key(key) else BLUES)
+        )
+
+class Effect:
+    def is_ended(self):
+        return False
+
+    def update(self, dt):
+        pass
+
+
+class BlendType(enum.Enum):
+    OVERLAY = 1
+
+
+class PixelFadeOut(Effect):
+    def __init__(self, pixel: int, palette: ShadePalette, speed=0.05):
+        self.pixel = pixel
+        self.color = palette.normal
+        self.speed = speed
+    
+    def update(self, dt):
+        r, g, b = self.color
+        self.color = (
+            r * self.speed ** dt,
+            g * self.speed ** dt,
+            b * self.speed ** dt
+        )
+
+    def get_canvas(self):
+        canvas = new_canvas()
+        canvas[self.pixel] = self.color
+        return canvas
+    
+    def is_ended(self):
+        if max(self.color) <= 2:
+            return True
+        return False
+
 
 class Compositor:
-    def new_canvas(self) -> typing.List[ColorT]:
-        return LEDConfig.total_lights * [(0, 0, 0)]
+    def __init__(self):
+        self.frame_history = CBuffer()
+        self.effect_manager = EffectManager()
+        self.last_time = None
 
-    def __init__(self) -> None:
+    def new_frame(self):
+        f = Frame(self)
+        self.frame_history.add(f)
+        return Frame(self)
+
+    def update(self):
+        t = time.time()
+        if self.last_time is None:
+            self.last_time = t
+        dt = t - self.last_time
+        self.last_time = t
+        self.effect_manager.update(dt)
+
+
+def overlay_canvas(back, fore):
+    return [b if f == DARK else f for b, f in zip(back, fore)]
+
+
+def halve(c):
+    return tuple(x//2 for x in c)
+
+
+class Frame:
+    def new_canvas(self) -> typing.List[ColorT]:
+        return new_canvas()
+
+    def __init__(self, compositor) -> None:
         self.canvas = self.new_canvas()
         self.pressed_keys = []
         self.hl_keys = []
+        self.compositor = compositor
+        self.effect_manager = compositor.effect_manager
+
+    def overlay_effects(self):
+        canvas = new_canvas()
+        for e in self.effect_manager.effects:
+            canvas = overlay_canvas(canvas, e.get_canvas())
+        self.canvas = overlay_canvas(self.canvas, canvas)
+
+    def on_press(self, note):
+        pass
+
+    def on_release(self, note):
+        self.effect_manager.spawn_key_release_effects(note)
 
     def add_pressed_keys(self, keys):
         self.pressed_keys = list(keys)
@@ -61,7 +190,7 @@ class Compositor:
 
     def color_test(self, t):
         for i in range(0, 40):
-            self.canvas[i*3] = (2*i, t, 0)
+            self.canvas[i*3] = (2*i, 0, t)
 
     def _clip_color_space(self):
         self.canvas = [clip_color(x) for x in self.canvas]
@@ -78,8 +207,9 @@ class Compositor:
         )
 
     def mute_color(self, c):
-        while max(c) > 15:
-            c = tuple(x//2 for x in c)
+        c = halve(c)
+        while max(c) > 10:
+            c = halve(c)
         return c
 
     def blur(self):
@@ -94,13 +224,14 @@ class Compositor:
         self.canvas = canvas
 
     def as_state_event(self):
+        self.compositor.update()
+        self.overlay_effects()
         self.overlay_keys(self.pressed_keys, BLUES)
-        self.hl_keys = self.pressed_keys
+        black_press = [x for x in self.pressed_keys if KeyboardConfig.is_black_key(x)]
+        self.overlay_keys(black_press, PURPLES)
 
         self.overlay_keys(self.hl_keys, GREENS)
-
         black_hl = [x for x in self.hl_keys if KeyboardConfig.is_black_key(x)]
-        print(self.hl_keys, black_hl)
         self.overlay_keys(black_hl, YELLOWS)
 
         self.blur()
@@ -113,15 +244,17 @@ class Compositor:
             }
         )
 
+
 def main():
     s = connect()
     while True:
         for t in range(0, 80):
             print(f"T: {t}")
-            c = Compositor()
+            c = Compositor().new_frame()
             c.color_test(t)
             s.sendall(c.as_state_event().serialize().encode())
             time.sleep(0.1)
+
 
 if __name__ == '__main__':
     main()
