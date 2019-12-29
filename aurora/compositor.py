@@ -7,16 +7,7 @@ import typing
 import itertools
 from collections import deque
 import enum
-
-
-def key_to_normalized_position(note):
-    return (note - KeyboardConfig.low_note) / (KeyboardConfig.high_note - KeyboardConfig.low_note + 1)
-
-
-def key_to_closest_pixel(note):
-    ratio = key_to_normalized_position(note)
-    n = round(ratio * (LEDConfig.high_light - LEDConfig.low_light + 1) + LEDConfig.low_light)
-    return int(n)
+import mapper
 
 
 def clip_color(color):
@@ -73,20 +64,36 @@ def new_canvas() -> typing.List[ColorT]:
 
 
 class EffectManager:
-    def __init__(self):
+    def __init__(self, key_mapper: mapper.KeyMapper):
         self.effects = list()
+        self.key_mapper = key_mapper
     
     def update(self, dt):
         for e in list(self.effects):
             e.update(dt)
             if e.is_ended():
                 self.effects.remove(e)
-        if len(self.effects) > 0:
-            print(f"{len(self.effects)} effects managed")
+        # if len(self.effects) > 0:
+        #     print(f"{len(self.effects)} effects managed")
 
-    def spawn_key_release_effects(self, key):
+    def spawn_key_release_effects(self, key, palette=None):
+        if palette is None:
+            palette = PURPLES if KeyboardConfig.is_black_key(key) else BLUES
         self.effects.append(
-            PixelFadeOut(key_to_closest_pixel(key), PURPLES if KeyboardConfig.is_black_key(key) else BLUES)
+            PixelFadeOut(
+                self.key_mapper.key_to_pixel(key),
+                palette
+            )
+        )
+
+    def spawn_led_selection_effects(self, pixel, palette=None):
+        if palette is None:
+            palette = PURPLES if KeyboardConfig.is_black_key(key) else BLUES
+        self.effects.append(
+            PixelFadeOut(
+                pixel,
+                palette
+            )
         )
 
 class Effect:
@@ -129,7 +136,7 @@ class PixelFadeOut(Effect):
 class Compositor:
     def __init__(self):
         self.frame_history = CBuffer()
-        self.effect_manager = EffectManager()
+        self.effect_manager = EffectManager(mapper.KeyMapper())
         self.last_time = None
 
     def new_frame(self):
@@ -174,8 +181,8 @@ class Frame:
     def on_press(self, note):
         pass
 
-    def on_release(self, note):
-        self.effect_manager.spawn_key_release_effects(note)
+    def on_release(self, note, palette=None):
+        self.effect_manager.spawn_key_release_effects(note, palette=palette)
 
     def add_pressed_keys(self, keys):
         self.pressed_keys = list(keys)
@@ -185,7 +192,7 @@ class Frame:
 
     def overlay_keys(self, keys, shades: ShadePalette):
         for key in keys:
-            n = key_to_closest_pixel(key)
+            n = self.effect_manager.key_mapper.key_to_pixel(key)
             self.canvas[n] = shades.normal
 
     def color_test(self, t):

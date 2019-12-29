@@ -68,7 +68,7 @@ class EventHandler:
 
         wire_event = frame.as_state_event()
         payload = wire_event.serialize().encode()
-        print("payload", payload)
+        # print("payload", payload)
         self.s.sendall(payload)
 
     def on_midi_event(self, event, data):
