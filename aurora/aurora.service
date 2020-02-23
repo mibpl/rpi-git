@@ -1,0 +1,12 @@
+[Unit]
+Description=mib aurora led driver
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /home/pi/rpi-git/aurora/server.py
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
