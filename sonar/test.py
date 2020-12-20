@@ -72,13 +72,12 @@ iii = 0
 
 
 def callback(outdata, frames, time, status):
-  t = time.currentTime
   global iii
-  start = iii
   global fff
-  iii += frames
-  sample_index = np.arange(start, start + frames, dtype=np.int32)
-  wave = volume * np.sin(2.0 / sample_rate * np.pi * sample_index * fff)
+  sample_index = np.arange(frames, dtype=np.int32)
+  reindexed = (2.0 / sample_rate * np.pi * sample_index * fff) + iii
+  iii = reindexed[-1]
+  wave = volume * np.sin(reindexed)
   outdata[:, 0] = wave
 
 

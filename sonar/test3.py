@@ -16,19 +16,25 @@ import random
 
 
 iii = 0
+fff = 260
 
 
 def callback(outdata, frames, time, status):
   global iii
   start = iii
-  iii += frames
-  f = 400
-  sample_index = np.arange(start, start + frames, dtype=np.int32)
-  wave = volume * np.sin(2.0 / sample_rate * np.pi * sample_index * f)
+  
+  sample_index = np.arange(frames, dtype=np.int32)
+  reindexed = (2.0 / sample_rate * np.pi * sample_index * fff) + iii
+  wave = volume * np.sin(reindexed)
+  iii = reindexed[-1]
 
   outdata[:, 0] = wave
 
 stream = sd.OutputStream(samplerate=sample_rate, callback=callback, channels=1, dtype=np.float32)
 
 stream.start()
-time.sleep(5)
+
+for f in (400, 260, 300, 400, 260, 300, 240, 420, 260, 500):
+  fff = f
+  time.sleep(0.06)
+
