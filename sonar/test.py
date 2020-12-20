@@ -68,12 +68,15 @@ def play(f):
 
 
 fff = 260
+iii = 0
 
 
 def callback(outdata, frames, time, status):
   t = time.currentTime
-  start = t * sample_rate
+  global iii
+  start = iii
   global fff
+  iii += frames
   sample_index = np.arange(start, start + frames, dtype=np.int32)
   wave = volume * np.sin(2.0 / sample_rate * np.pi * sample_index * fff)
   outdata[:, 0] = wave
@@ -82,7 +85,7 @@ def callback(outdata, frames, time, status):
 def main():
   setup()
   time.sleep(1)
-  stream = sd.OutputStream(samplerate=sample_rate, callback=callback, channels=1, dtype=np.float32, latency='low')
+  stream = sd.OutputStream(samplerate=sample_rate, callback=callback, channels=1, dtype=np.float32)
   stream.start()
 
   try:

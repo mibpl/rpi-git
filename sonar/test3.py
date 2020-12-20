@@ -15,9 +15,13 @@ import time
 import random
 
 
+iii = 0
+
+
 def callback(outdata, frames, time, status):
-  t = time.currentTime
-  start = t * sample_rate
+  global iii
+  start = iii
+  iii += frames
   f = 400
   sample_index = np.arange(start, start + frames, dtype=np.int32)
   wave = volume * np.sin(2.0 / sample_rate * np.pi * sample_index * f)
