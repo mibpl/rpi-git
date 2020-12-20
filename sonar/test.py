@@ -1,6 +1,9 @@
 import sys
+import os
 import time
 from RPi import GPIO
+import sounddevice as sd
+import numpy as np
 
 
 TRIG_PORT = 23
@@ -48,13 +51,50 @@ def draw_ui(d: float):
   sys.stdout.flush()
 
 
+
+
+sample_rate = 44100
+volume = 0.3
+
+
+def play(f):
+	duration = 500.0 / 1000
+
+	sample_index = np.arange(duration * sample_rate)
+	wave = volume * np.sin(2 * np.pi * sample_index * f / sample_rate)
+
+	# sd.stop()
+	sd.play(wave, sample_rate, blocking=False)
+
+
+fff = 260
+
+
+def callback(outdata, frames, time, status):
+  t = time.currentTime
+  start = t * sample_rate
+  global fff
+  sample_index = np.arange(start, start + frames, dtype=np.int32)
+  wave = volume * np.sin(2.0 / sample_rate * np.pi * sample_index * fff)
+  outdata[:, 0] = wave
+
+
 def main():
   setup()
-  time.sleep(2)
+  time.sleep(1)
+  stream = sd.OutputStream(samplerate=sample_rate, callback=callback, channels=1, dtype=np.float32, latency='low')
+  stream.start()
+
   try:
     while True:
       d = ping()
       draw_ui(d)
+      f = int(
+        (min((d - 5), 40) / 40.0) * (523 - 261) + 261
+      )
+      global fff
+      fff = f
+      #play(f)
       time.sleep(60.0 / 1000)
   except:
     GPIO.cleanup()
