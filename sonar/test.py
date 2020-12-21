@@ -42,64 +42,69 @@ def ping() -> float:
   return (end - start) * SCALE
 
 
-def draw_ui(d: float):
-  if d > 80:
-    return
-  p = '{:6.2f}  '.format(d)
-  s = "#" * int(d)
-  print("\r{:90}".format(p + s), end='')
-  sys.stdout.flush()
-
-
-
-
 sample_rate = 44100
 volume = 0.3
 
 
-def play(f):
-	duration = 500.0 / 1000
-
-	sample_index = np.arange(duration * sample_rate)
-	wave = volume * np.sin(2 * np.pi * sample_index * f / sample_rate)
-
-	# sd.stop()
-	sd.play(wave, sample_rate, blocking=False)
+cb_state_freq = 260
+cb_state_i = 0
+cb_state_log = []
 
 
-fff = 260
-iii = 0
+def synth(f, i, frames):
+  sample_index = np.arange(frames, dtype=np.int32)
+  reindexed = (2.0 / sample_rate * np.pi * sample_index * f) + i
+  
+  return volume * np.sin(reindexed), reindexed[-1]
 
 
 def callback(outdata, frames, time, status):
-  global iii
-  global fff
-  sample_index = np.arange(frames, dtype=np.int32)
-  reindexed = (2.0 / sample_rate * np.pi * sample_index * fff) + iii
-  iii = reindexed[-1]
-  wave = volume * np.sin(reindexed)
-  outdata[:, 0] = wave
+  global cb_state_i
+  cb_state_log.append((cb_state_freq, cb_state_i, frames))
+
+  outdata[:, 0], cb_state_i = synth(cb_state_freq, cb_state_i, frames)
+
+
+def draw_ui(d: float):
+  if d > 60:
+    return
+  
+  p = '{:6.2f}  {:3.0f}  '.format(d, cb_state_freq)
+  s = "#" * int(d)
+  
+  print("\r{:100}".format(p + s), end='')
+  sys.stdout.flush()
 
 
 def main():
   setup()
   time.sleep(1)
-  stream = sd.OutputStream(samplerate=sample_rate, callback=callback, channels=1, dtype=np.float32)
+  stream = sd.OutputStream(
+    samplerate=sample_rate,
+    callback=callback,
+    channels=1,
+    dtype=np.float32
+  )
   stream.start()
 
   try:
     while True:
       d = ping()
+      
+      if 5 < d < 45:
+        f = int(
+          ((d - 5) / 40.0) * (700 - 400) + 400
+        )
+
+        global cb_state_freq
+        cb_state_freq = f
+
       draw_ui(d)
-      f = int(
-        (min((d - 5), 40) / 40.0) * (523 - 261) + 261
-      )
-      global fff
-      fff = f
-      #play(f)
       time.sleep(60.0 / 1000)
   except:
     GPIO.cleanup()
+    with open("/tmp/sonar.log", 'w') as f:
+      f.write(repr(cb_state_log))
     raise
 
 
