@@ -6,7 +6,7 @@
     {
       "border": "normal",
       "current_border_width": 2,
-      "percent": 0.5,
+      "percent": 0.3,
       "name": "mib-launcher",
       "swallows": [
         {
@@ -18,7 +18,7 @@
     },
     {
       "layout": "splitv",
-      "percent": 0.5,
+      "percent": 0.7,
       "type": "con",
       "swallows": [
         {

@@ -1,0 +1,7 @@
+[Desktop Entry]
+
+Type=Application
+Version=1.0
+Name=Numeric
+Exec=sh -c "killall onboard; onboard --layout=/home/pi/rpi-git/gnuradio/numeric.onboard"
+Icon=debian-logo

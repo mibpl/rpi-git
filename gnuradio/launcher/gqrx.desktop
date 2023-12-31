@@ -1,0 +1,7 @@
+[Desktop Entry]
+
+Type=Application
+Version=1.0
+Name=Terminal
+Exec=gqrx
+Icon=/home/pi/rpi-git/gnuradio/icons/calendar.svg

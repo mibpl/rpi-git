@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created for Onboard -->
+
+<svg
+   id="svg2"
+   height="135"
+   width="391"
+   version="1.0"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="Full Keyboard-Numpad.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs3230" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1528"
+     inkscape:window-height="1032"
+     id="namedview3228"
+     showgrid="false"
+     inkscape:zoom="2.629156"
+     inkscape:cx="195.30983"
+     inkscape:cy="68.463035"
+     inkscape:window-x="2958"
+     inkscape:window-y="1036"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <metadata
+     id="metadata44">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Full Keyboard-Numpad.svg</dc:title>
+        <cc:license
+           rdf:resource="https://www.gnu.org/licenses/gpl.txt" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Onboard Devel Team at https://launchpad.net/~onboard</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>GPL-3+ license</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Onboard Devel Team</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:source>https://launchpad.net/onboard</dc:source>
+        <dc:relation>This file is part of Onboard</dc:relation>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Copyright © 2016, Francesco Fumanti &lt;francesco.fumanti@gmx.net&gt;
+Copyright © 2011-2014, marmuta &lt;marmvta@gmail.com&gt;</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <rect
+     id="NMLK"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="19.721001"
+     x="59.662998" />
+  <rect
+     id="KPMU"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="19.721001"
+     x="106.06" />
+  <rect
+     id="KPDV"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="19.721001"
+     x="82.862999" />
+  <rect
+     id="KPSU"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="19.721001"
+     x="129.25999" />
+  <rect
+     id="KPAD"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="45.179001"
+     width="21.979"
+     y="42.919998"
+     x="129.25999" />
+  <rect
+     id="KP7"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="42.919998"
+     x="59.662998" />
+  <rect
+     id="KP8"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="42.919998"
+     x="82.862999" />
+  <rect
+     id="KP9"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="42.919998"
+     x="106.06" />
+  <rect
+     id="KP4"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="66.121002"
+     x="59.662998" />
+  <rect
+     id="KP5"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="66.121002"
+     x="82.862999" />
+  <rect
+     id="KP6"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="66.121002"
+     x="106.06" />
+  <rect
+     id="KP1"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="89.321999"
+     x="59.662998" />
+  <rect
+     id="KP2"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="89.321999"
+     x="82.862999" />
+  <rect
+     id="KP3"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="89.321999"
+     x="106.06" />
+  <rect
+     id="KPEN"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="45.178001"
+     width="21.979"
+     y="89.321999"
+     x="129.25999" />
+  <rect
+     id="KP0"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="45.179001"
+     y="112.52"
+     x="59.662998" />
+  <rect
+     id="KPDL"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="21.979"
+     width="21.979"
+     y="112.52"
+     x="106.06" />
+  <rect
+     id="quit"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="24.429001"
+     width="40.751999"
+     y="109.92"
+     x="8.6466999" />
+  <rect
+     id="settings"
+     style="fill:#e5d8b2;stroke:#000000"
+     height="24.429001"
+     width="40.751999"
+     y="79.832001"
+     x="8.6466999" />
+  <rect
+     id="hide"
+     height="25.014702"
+     width="24.30945"
+     y="20.21298"
+     x="25.238274"
+     style="fill:#e5d8b2;stroke:#000000;stroke-width:1.21195;enable-background:new" />
+</svg>

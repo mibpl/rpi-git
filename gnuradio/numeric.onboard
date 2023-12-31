@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<keyboard format="3.1" id="full">
+  <include file="key_defs.xml"/>
+  <box border="1" orientation="vertical" spacing="3">
+    <!--- word suggestions -->
+    <panel filename="full.svg" scan_priority="1">
+      <include file="word_suggestions.xml"/>
+    </panel>
+    <box spacing="3">
+      <!--- keyboard, multiple layers -->
+      <panel>
+        <panel filename="full.svg" layer="alpha">
+          <key group='bottomrow' id='hide'/>
+
+          <key group="keypadmisc" id="NMLK" scan_priority="1"/>
+          <key group="keypadmisc" id="NMLK" scan_priority="1"/>
+          <key group="keypadoperators" id="KPSU" scan_priority="1"/>
+          <key group="keypadoperators" id="KPDV" scan_priority="1"/>
+          <key group="keypadoperators" id="KPAD" scan_priority="1"/>
+          <key group="keypadoperators" id="KPMU" scan_priority="1"/>
+          <key group="keypadnumber" id="KP0" scan_priority="1"/>
+          <key group="keypadnumber" id="KP1" scan_priority="1"/>
+          <key group="keypadnumber" id="KP2" scan_priority="1"/>
+          <key group="keypadnumber" id="KP3" scan_priority="1"/>
+          <key group="keypadnumber" id="KP4" scan_priority="1"/>
+          <key group="keypadnumber" id="KP5" scan_priority="1"/>
+          <key group="keypadnumber" id="KP6" scan_priority="1"/>
+          <key group="keypadnumber" id="KP7" scan_priority="1"/>
+          <key group="keypadnumber" id="KP8" scan_priority="1"/>
+          <key group="keypadnumber" id="KP9" scan_priority="1"/>
+          <key group="keypadmisc" id="KPDL" scan_priority="1"/>
+          <key group="keypadmisc" id="KPEN" scan_priority="1"/>.
+        </panel>
+      </panel>
+    </box>
+  </box>
+</keyboard>

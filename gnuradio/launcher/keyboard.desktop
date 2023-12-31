@@ -3,5 +3,5 @@
 Type=Application
 Version=1.0
 Name=Onboard
-Exec=onboard
+Exec=sh -c "killall onboard; onboard"
 Icon=debian-logo
