@@ -1,0 +1,7 @@
+[Desktop Entry]
+
+Type=Application
+Version=1.0
+Name=Terminal
+Exec=i3-sensible-terminal
+Icon=xterm-color_48x48
