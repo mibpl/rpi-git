@@ -11,6 +11,9 @@
       <panel>
         <panel filename="full.svg" layer="alpha">
           <key group='bottomrow' id='hide'/>
+          <key group="bottomrow" id="move"/>
+          <key group="bottomrow" id="BKSP"/>
+          <key group="editing" id="DELE"/>
 
           <key group="keypadmisc" id="NMLK" scan_priority="1"/>
           <key group="keypadmisc" id="NMLK" scan_priority="1"/>

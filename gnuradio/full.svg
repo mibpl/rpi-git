@@ -7,7 +7,7 @@
    width="391"
    version="1.0"
    inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
-   sodipodi:docname="Full Keyboard-Numpad.svg"
+   sodipodi:docname="full.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -26,15 +26,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1528"
-     inkscape:window-height="1032"
+     inkscape:window-width="1874"
+     inkscape:window-height="1186"
      id="namedview3228"
      showgrid="false"
      inkscape:zoom="2.629156"
      inkscape:cx="195.30983"
      inkscape:cy="68.463035"
-     inkscape:window-x="2958"
-     inkscape:window-y="1036"
+     inkscape:window-x="1449"
+     inkscape:window-y="964"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg2"
      inkscape:showpageshadow="2"
@@ -48,7 +48,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Full Keyboard-Numpad.svg</dc:title>
         <cc:license
            rdf:resource="https://www.gnu.org/licenses/gpl.txt" />
         <dc:creator>
@@ -107,11 +106,11 @@ Copyright © 2011-2014, marmuta &lt;marmvta@gmail.com&gt;</dc:title>
      x="129.25999" />
   <rect
      id="KPAD"
-     style="fill:#e5d8b2;stroke:#000000"
-     height="45.179001"
-     width="21.979"
-     y="42.919998"
-     x="129.25999" />
+     style="fill:#e5d8b2;stroke:#000000;stroke-width:0.700895"
+     height="21.896393"
+     width="22.278105"
+     y="42.770447"
+     x="129.11044" />
   <rect
      id="KP7"
      style="fill:#e5d8b2;stroke:#000000"
@@ -177,44 +176,51 @@ Copyright © 2011-2014, marmuta &lt;marmvta@gmail.com&gt;</dc:title>
      x="106.06" />
   <rect
      id="KPEN"
-     style="fill:#e5d8b2;stroke:#000000"
-     height="45.178001"
-     width="21.979"
-     y="89.321999"
-     x="129.25999" />
+     style="fill:#e5d8b2;stroke:#000000;stroke-width:0.991058"
+     height="21.224884"
+     width="45.950008"
+     y="112.51888"
+     x="106.05415" />
   <rect
      id="KP0"
-     style="fill:#e5d8b2;stroke:#000000"
-     height="21.979"
-     width="45.179001"
-     y="112.52"
-     x="59.662998" />
+     style="fill:#e5d8b2;stroke:#000000;stroke-width:0.700895"
+     height="22.278105"
+     width="21.896393"
+     y="112.37045"
+     x="59.513447" />
   <rect
      id="KPDL"
      style="fill:#e5d8b2;stroke:#000000"
      height="21.979"
      width="21.979"
-     y="112.52"
-     x="106.06" />
-  <rect
-     id="quit"
-     style="fill:#e5d8b2;stroke:#000000"
-     height="24.429001"
-     width="40.751999"
-     y="109.92"
-     x="8.6466999" />
-  <rect
-     id="settings"
-     style="fill:#e5d8b2;stroke:#000000"
-     height="24.429001"
-     width="40.751999"
-     y="79.832001"
-     x="8.6466999" />
+     y="112.13965"
+     x="82.858635" />
   <rect
      id="hide"
      height="25.014702"
      width="24.30945"
-     y="20.21298"
-     x="25.238274"
+     y="100.84721"
+     x="30.943527"
      style="fill:#e5d8b2;stroke:#000000;stroke-width:1.21195;enable-background:new" />
+  <rect
+     id="move"
+     style="fill:#e5d8b2;stroke:#000000;stroke-width:1.6734"
+     height="24.933611"
+     width="24.258514"
+     y="27.207314"
+     x="30.840595" />
+  <rect
+     id="BKSP"
+     style="fill:#d8cca5;stroke:#000000;stroke-width:1"
+     height="18"
+     width="18"
+     y="67.283073"
+     x="131.35019" />
+  <rect
+     id="DELE"
+     style="fill:#d8cca5;stroke:#000000;stroke-width:1"
+     height="18"
+     width="18"
+     y="90.484436"
+     x="131.71303" />
 </svg>
